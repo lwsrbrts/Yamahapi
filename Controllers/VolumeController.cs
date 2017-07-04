@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using System.Text;
+using System.Xml;
+using System.IO;
+using System.Xml.Linq;
+
 
 namespace Yamahapi.Controllers
 {
@@ -18,6 +23,38 @@ namespace Yamahapi.Controllers
         {            
             Configuration = configuration;
         }
+
+        // GET api/volume
+        [HttpGet]
+        public async Task<string> GetVolume()
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var ReceiverIP = Configuration.GetValue<string>("Receiver:ReceiverIP");
+                    client.BaseAddress = new Uri($"http://{ReceiverIP}/");
+                    var response = await client.PostAsync("YamahaRemoteControl/ctrl", new StringContent("<YAMAHA_AV cmd=\"GET\"><Main_Zone><Basic_Status>GetParam</Basic_Status></Main_Zone></YAMAHA_AV>"));
+
+                    //var contents = await response.Content.ReadAsStringAsync();
+                    var bytes = await response.Content.ReadAsByteArrayAsync();
+                  
+                    var XmlDoc = XDocument.Parse(Encoding.UTF8.GetString(bytes));
+                    
+                    return XmlDoc.Root.Element("Main_Zone").Element("Basic_Status").Element("Volume").Element("Lvl").Element("Val").Value;
+
+                }
+                catch (HttpRequestException httpRequestException)
+                {
+                    return httpRequestException.Message;
+                }
+                catch (InvalidOperationException invalidOperationException)
+                {
+                    return invalidOperationException.Message;
+                }
+            }
+        }
+
 
         // Set the volume.
         [HttpPut("{vol}")]
