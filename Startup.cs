@@ -29,13 +29,8 @@ namespace Yamahapi
         {
             // Add framework services.
             services.AddMvc();
-
-            // Add functionality to inject IOptions<T>
-            services.AddOptions();
             
-            // Add our Config object so it can be injected
-            //services.Configure<ReceiverSettings>(Configuration.GetSection("Receiver"));
-
+            // Add configuration.
             services.AddSingleton<IConfiguration>(Configuration);
             
         }
