@@ -20,6 +20,7 @@ namespace Yamahapi
                 .Build();
 
             host.Run();
+            
         }
     }
 }

@@ -45,3 +45,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.vscode
+bin/Debug
+bin/Release
+obj/Debug
+obj/Release
