@@ -36,12 +36,14 @@ namespace Yamahapi.Controllers
                     client.BaseAddress = new Uri($"http://{ReceiverIP}/");
                     var response = await client.PostAsync("YamahaRemoteControl/ctrl", new StringContent("<YAMAHA_AV cmd=\"GET\"><Main_Zone><Basic_Status>GetParam</Basic_Status></Main_Zone></YAMAHA_AV>"));
 
-                    //var contents = await response.Content.ReadAsStringAsync();
+                    //var contents = await response.Content.ReadAsStringAsync(); // Fails because the return value of the charset from the receiver "UTF-8" is invalid.
                     var bytes = await response.Content.ReadAsByteArrayAsync();
                   
                     var XmlDoc = XDocument.Parse(Encoding.UTF8.GetString(bytes));
                     
-                    return XmlDoc.Root.Element("Main_Zone").Element("Basic_Status").Element("Volume").Element("Lvl").Element("Val").Value;
+                    string scurrentVolume = XmlDoc.Root.Element("Main_Zone").Element("Basic_Status").Element("Volume").Element("Lvl").Element("Val").Value.Replace("-","");
+                    double icurrentVolume = Convert.ToDouble(scurrentVolume)/10;
+                    return icurrentVolume.ToString();
 
                 }
                 catch (HttpRequestException httpRequestException)
