@@ -6,9 +6,8 @@ The idea being that this allows me to provide the beginnings of an interface tha
 
 This WebAPI is my first actual use of any "respected" programming language so it is likely to be very rough and very verbose. I stumbled on to .NET Core by accident - the fact that it is technically cross-platform is good news and the capability to implement an "API" is pretty simple - something I did need truth be told.
 
-As it is, there are two controllers in this API currently: `Power` and `Mute`.
+There are 4 controllers.
 
-I use `PUT` and `DELETE` to turn these on and off.
 ## Power
 ``` 
 PUT http://server.com/api/power - turns the receiver on.
@@ -20,6 +19,21 @@ DELETE http://server.com/api/power - turns the receiver off.
 PUT http://server.com/api/mute - mutes the receiver.
 DELETE http://server.com/api/mute - unmutes the receiver.
 ```
+
+## Volume
+This assumes that the receiver is configured to use the dB (decibel) setting for reporting volume level.
+```html
+PUT http://server.com/api/volume/40 - sets the volume of the receiver to -40.0dB
+GET http://server.com/api/volume - gets the current volume setting of the receiver.
+```
+
+## Input/Inputs
+```html
+GET http://server.com/api/inputs - gets a list of all inputs available on the receiver.
+GET http://server.com/api/input - gets the current input setting on the receiver.
+PUT http://server.com/api/input/hdmi1 - sets the input of the receiver to HDMI1
+```
+
 I do hope to add further controllers as my knowledge improves but again, this is very much a personal project. The intention is for me to integrate with Google Home (via IFTTT using Maker Webhooks).
 
 To make it a little easier for anyone (brave enough) to use this, I've added a configuration item for the Receiver IP address to make it simple for someone to change if they're using a "built" version. See the `appsettings.json` file.
