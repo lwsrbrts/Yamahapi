@@ -10,7 +10,7 @@ This (clicking the button):
 
 ![Yamaha Web UI](http://www.lewisroberts.com/wp-content/uploads/2017/07/YamahaWebGUI-e1499356368140.png)
 
-Becomes:
+Becomes: (a bit pointless, but you get my meaning...)
 ```bash
 curl http://server.com/api/power -X PUT
 ```
