@@ -1,10 +1,28 @@
 # Yamaha AV Receiver .NET Core WebAPI
 
-I have a Yamaha RX-V775 AV receiver. It's a couple of years old now so isn't likely to see much integration with any home automation systems - so, knowing there's a web based interface to the receiver, I assumed (correctly) that there would be a way to interface with it by reverse-engineering the web based interface. I've previously done this with PowerShell which is great, but that requires commands to be input to do the actions.
+## Why?
+I have a Yamaha RX-V775 AV receiver. It's a couple of years old now so isn't likely to see much integration with any home automation systems. Since "smart-home" use is never likely to come to the likes of an old Yamaha receiver, I wanted to see if I could make it smart using code and smarts. The intention is to use Google Home with IFTTT (If This Then That) and its Google Assistant and Maker Webhooks to allow me to give instructions to have it turn on and off, up and down, using only my voice.
 
-The idea being that this allows me to provide the beginnings of an interface that I might be able to implement in some way to integrate home automation products with my older Yamaha receiver. The receiver offers a web-based interface which uses XML.
+## How?
+The receiver offers a web-based interface which is presented as a typical GUI with buttons and what not to perform actions that are reflected on the receiver. Pressing a button sends a string of XML data in the body using an HTTP POST to the receiver's web interface. It isn't password protected in any way so opening it up to the Internet is a Bad Idea™. Since I've done the leg work with PowerShell already (I have another project that uses PowerShell to control the receiver), it's a simple (ha!) matter of working out how to use .NET Core WebAPI to perform the same action when it receives an HTTP call.
+
+This (clicking the button):
+
+![Yamaha Web UI](http://www.lewisroberts.com/wp-content/uploads/2017/07/YamahaWebGUI-e1499356368140.png)
+
+Becomes:
+```bash
+curl http://server.com/api/power -X PUT
+```
+or (after IFTTT/Maker Webhooks integration)
+```bash
+"OK Google, turn on the receiver."
+```
 
 This WebAPI is my first actual use of any "respected" programming language so it is likely to be very rough and very verbose. I stumbled on to .NET Core by accident - the fact that it is technically cross-platform is good news and the capability to implement an "API" is pretty simple - something I did need truth be told.
+
+## Warning
+There is no authentication/authorisation performed when accessing the API.
 
 There are 4 controllers.
 
